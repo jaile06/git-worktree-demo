@@ -1243,3 +1243,136 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================
+   COOKIE CONSENT BANNER
+   ======================================== */
+
+/* 底部固定定位，z-index 高於 navbar（1000），預設從底部隱藏 */
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  /* 預設在畫面外（向下偏移），動畫就緒時 translateY(0) */
+  transform: translateY(110%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 深色主題背景：glassmorphism */
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--color-border-hover);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+  padding: var(--space-4) 0;
+}
+
+/* 觸發滑入：translateY 歸零 */
+.cookie-consent--visible {
+  transform: translateY(0);
+}
+
+/* 內容容器：水平排列文字與按鈕群 */
+.cookie-consent__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+/* 圖示 + 文字區：佔剩餘空間 */
+.cookie-consent__content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.cookie-consent__icon {
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.cookie-consent__title {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.cookie-consent__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* 「了解更多」連結樣式 */
+.cookie-consent__link {
+  color: var(--color-primary-light);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.cookie-consent__link:hover {
+  color: var(--color-accent-light);
+}
+
+/* 按鈕群組 */
+.cookie-consent__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* 調整按鈕尺寸以適應 banner 高度 */
+.cookie-consent__btn-secondary,
+.cookie-consent__btn-primary {
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* ---- 淺色主題覆寫 ---- */
+@media (prefers-color-scheme: light) {
+  .cookie-consent {
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .cookie-consent__title {
+    color: #0f172a;
+  }
+
+  .cookie-consent__desc {
+    color: #475569;
+  }
+}
+
+/* ---- 響應式：窄螢幕改直排 ---- */
+@media (max-width: 640px) {
+  .cookie-consent__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cookie-consent__actions {
+    flex-direction: column;
+  }
+
+  .cookie-consent__btn-secondary,
+  .cookie-consent__btn-primary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
