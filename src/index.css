@@ -3,8 +3,39 @@
    ======================================== */
 
 /* --- CSS Custom Properties --- */
+/* 淺色主題（預設） */
 :root {
-  /* Colors */
+  /* Colors - Light Theme */
+  --color-bg: #f8fafc;
+  --color-bg-elevated: #f1f5f9;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f8fafc;
+  --color-surface: #e2e8f0;
+
+  --color-primary: #6366f1;
+  --color-primary-light: #4f46e5;
+  --color-primary-dark: #3730a3;
+  --color-primary-glow: rgba(99, 102, 241, 0.15);
+
+  --color-accent: #0891b2;
+  --color-accent-light: #06b6d4;
+
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #f8fafc;
+
+  --color-border: rgba(15, 23, 42, 0.1);
+  --color-border-hover: rgba(15, 23, 42, 0.2);
+}
+
+/* 深色主題 */
+[data-theme="dark"] {
+  /* Colors - Dark Theme */
   --color-bg: #0a0e1a;
   --color-bg-elevated: #111827;
   --color-bg-card: #1a2035;
@@ -106,6 +137,8 @@ body {
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 主題切換平滑過渡 */
+  transition: color 0.3s, background-color 0.3s;
 }
 
 img {
@@ -118,7 +151,8 @@ a {
   text-decoration: none;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -256,9 +290,11 @@ button {
   right: 0;
   height: var(--navbar-height);
   z-index: 1000;
-  background: rgba(10, 14, 26, 0.8);
+  /* 使用 CSS 變數，深/淺主題自動切換 */
+  background: color-mix(in srgb, var(--color-bg) 85%, transparent);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .navbar__inner {
@@ -374,6 +410,49 @@ button {
 }
 
 /* ========================================
+   THEME TOGGLE BUTTON
+   ======================================== */
+/* 主題切換按鈕：圓形、帶旋轉動畫 */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 12px var(--color-primary-glow);
+  transform: scale(1.1);
+}
+
+/* icon 旋轉動畫 */
+.theme-toggle__icon {
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+  line-height: 1;
+}
+
+.theme-toggle--transitioning .theme-toggle__icon {
+  transform: rotate(180deg);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
    HERO
    ======================================== */
 .hero {
@@ -404,8 +483,15 @@ button {
 }
 
 @keyframes heroGlow {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-  100% { transform: translate(-40px, 40px) scale(1.15); opacity: 0.9; }
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate(-40px, 40px) scale(1.15);
+    opacity: 0.9;
+  }
 }
 
 .hero__grid {
@@ -493,8 +579,15 @@ button {
 }
 
 @keyframes mockupFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 .hero__mockup-header {
@@ -513,9 +606,20 @@ button {
   opacity: 0.4;
 }
 
-.hero__mockup-dot:first-child { background: #ef4444; opacity: 0.7; }
-.hero__mockup-dot:nth-child(2) { background: #f59e0b; opacity: 0.7; }
-.hero__mockup-dot:nth-child(3) { background: #10b981; opacity: 0.7; }
+.hero__mockup-dot:first-child {
+  background: #ef4444;
+  opacity: 0.7;
+}
+
+.hero__mockup-dot:nth-child(2) {
+  background: #f59e0b;
+  opacity: 0.7;
+}
+
+.hero__mockup-dot:nth-child(3) {
+  background: #10b981;
+  opacity: 0.7;
+}
 
 .hero__mockup-body {
   display: flex;
@@ -578,10 +682,21 @@ button {
   opacity: 0.7;
 }
 
-.hero__mockup-card--blue { background: linear-gradient(135deg, #3b82f6, #6366f1); }
-.hero__mockup-card--purple { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
-.hero__mockup-card--amber { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-.hero__mockup-card--green { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.hero__mockup-card--blue {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+}
+
+.hero__mockup-card--purple {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+}
+
+.hero__mockup-card--amber {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.hero__mockup-card--green {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+}
 
 @media (max-width: 968px) {
   .hero__inner {
@@ -841,7 +956,7 @@ button {
   direction: rtl;
 }
 
-.use-cases__item--reverse > * {
+.use-cases__item--reverse>* {
   direction: ltr;
 }
 
@@ -925,6 +1040,7 @@ button {
 }
 
 @media (max-width: 768px) {
+
   .use-cases__item,
   .use-cases__item--reverse {
     grid-template-columns: 1fr;
